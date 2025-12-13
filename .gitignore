@@ -2,3 +2,8 @@
 .direnv
 target
 
+
+
+# Added by cargo
+
+/target
