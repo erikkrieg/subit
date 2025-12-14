@@ -9,14 +9,12 @@ async fn main() {
         .unwrap()
         .as_secs() as u64;
     rand::srand(seed);
-    // TODO: ensure good background color contrast with white items
     let bg = Color::new(
         rand::gen_range(0.0, 1.0),
         rand::gen_range(0.0, 1.0),
         rand::gen_range(0.0, 1.0),
         1.0,
     );
-    // TODO: have user provide min and max number of items to draw
     let max_n = 5;
     let mut history: Vec<Items> = Vec::new();
     let mut history_index = 0;
@@ -50,7 +48,6 @@ fn new_items(n: usize) -> Items {
     let mut items = Vec::new();
     for _ in 0..n {
         let size = ITEM_SIZE;
-        // TODO: ensure items do not overlap
         let x = rand::gen_range(size, screen_width() - size);
         let y = rand::gen_range(size, screen_height() - size);
         items.push((x, y, size));
