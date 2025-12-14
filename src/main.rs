@@ -18,23 +18,26 @@ async fn main() {
     );
     // TODO: have user provide min and max number of items to draw
     let max_n = 5;
-    let mut n = 0;
     let mut history: Vec<Items> = Vec::new();
     let mut history_index = 0;
     loop {
         if history_index >= history.len() {
-            n = rand::gen_range(1, max_n + 1);
-            history.push(new_items(n));
+            history.push(new_items(rand::gen_range(1, max_n + 1)));
         }
         clear_background(bg);
         draw_items(&history[history_index]);
-        if is_key_pressed(KeyCode::Space) || is_key_pressed(KeyCode::Right) {
-            history_index += 1;
-        }
-        if is_key_pressed(KeyCode::Left) {
-            if history_index > 0 {
-                history_index -= 1;
+        match get_last_key_pressed() {
+            Some(KeyCode::Space) | Some(KeyCode::Right) => history_index += 1,
+            Some(KeyCode::Left) =>  history_index = history_index.saturating_sub(1),
+            Some(KeyCode::Escape) | Some(KeyCode::Q) => break,
+            Some(k) if key_to_digit(k).is_some() => {
+                let guessed_n = key_to_digit(k).unwrap();
+                let actual_n = history[history_index].len();
+                if guessed_n == actual_n {
+                    history_index += 1;
+                }
             }
+            _ => {}
         }
         next_frame().await
     }
@@ -55,8 +58,23 @@ fn new_items(n: usize) -> Items {
     items
 }
 
-fn draw_items(items: &Items) {
+fn draw_items(items: &[Item]) {
     for (x, y, size) in items.iter() {
         draw_circle(*x, *y, *size, WHITE);
+    }
+}
+
+fn key_to_digit(k: KeyCode) -> Option<usize> {
+    match k {
+        KeyCode::Key1 | KeyCode::Kp1 => Some(1),
+        KeyCode::Key2 | KeyCode::Kp2 => Some(2),
+        KeyCode::Key3 | KeyCode::Kp3 => Some(3),
+        KeyCode::Key4 | KeyCode::Kp4 => Some(4),
+        KeyCode::Key5 | KeyCode::Kp5 => Some(5),
+        KeyCode::Key6 | KeyCode::Kp6 => Some(6),
+        KeyCode::Key7 | KeyCode::Kp7 => Some(7),
+        KeyCode::Key8 | KeyCode::Kp8 => Some(8),
+        KeyCode::Key9 | KeyCode::Kp9 => Some(9),
+        _ => None,
     }
 }
