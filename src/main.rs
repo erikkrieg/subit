@@ -1,5 +1,7 @@
 use macroquad::prelude::*;
 
+const ITEM_SIZE: f32 = 50.0;
+
 #[macroquad::main("subit")]
 async fn main() {
     let seed = std::time::SystemTime::now()
@@ -44,7 +46,7 @@ type Items = Vec<Item>;
 fn new_items(n: usize) -> Items {
     let mut items = Vec::new();
     for _ in 0..n {
-        let size = 50.0;
+        let size = ITEM_SIZE;
         // TODO: ensure items do not overlap
         let x = rand::gen_range(0.0 + size, screen_width() - size);
         let y = rand::gen_range(0.0 + size, screen_height() - size);
