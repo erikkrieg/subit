@@ -48,8 +48,8 @@ fn new_items(n: usize) -> Items {
     for _ in 0..n {
         let size = ITEM_SIZE;
         // TODO: ensure items do not overlap
-        let x = rand::gen_range(0.0 + size, screen_width() - size);
-        let y = rand::gen_range(0.0 + size, screen_height() - size);
+        let x = rand::gen_range(size, screen_width() - size);
+        let y = rand::gen_range(size, screen_height() - size);
         items.push((x, y, size));
     }
     items
